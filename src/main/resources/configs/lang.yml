@@ -1,0 +1,76 @@
+# DO NOT CHANGE
+version: 2
+
+# This is the language file for the plugin.
+# Customize the look of the plugin.
+# Supports PlaceholderAPI.
+# https://wiki.placeholderapi.com/users/placeholder-list
+
+# Ex. Change the not-in-town message to change what it says anytime the player
+# executes a command that requires them to be in a town but they are not.
+
+# LandClaim Placeholders:
+# %landclaim_town_name% - The town name
+# %landclaim_town_description% - The town description
+# %landclaim_town_citizens% - A list of the town citizens, separated by comma; no color.
+# %landclaim_town_citizens_colored% - A list of the town citizens, separated by comma; Green if online, red if offline.
+
+# Generic Town Command
+no-permission: "&cYou don't have permission for this command"
+town-officer-required: "&cYou must be the &7Mayor &cor an &7Officer &cto do this!"
+town-mayor-required: "&cYou must be the &7Mayor to do this!"
+town-required: "&cYou are not in a town!"
+town-not-allowed: "&cYou are already in a town!"
+town-does-not-exist: "&cA town with that name does not exist!"
+player-not-online: "&cThat player is not online!"
+player-not-allowed: "&cYou are not allowed to do that!"
+something-went-wrong: "&cSomething went wrong while executing this command! Contact the server administrator if the error persists."
+
+# Town Create
+town-created: "&aYou are now the mayor of &7%landclaim_town_name%&a!"
+player-create-town: "&aThe town of &7%landclaim_town_name% &ahas been founded!"
+town-already-exists: "&cThat town already exists!"
+town-illegal-name: "&cYou are not allowed to call your town that!"
+
+# Town Disband
+town-disbanded: "&7%landclaim_town_name% &chas been disbanded."
+town-disband-confirmation: "&aAre you sure? Type &7/town disband confirm &ato confirm."
+town-illegal-confirmation: "&cYou can't confirm disbanding before attempting! Try &7/town disband &afirst."
+
+# Town Join
+town-joined: "&aYou have joined &7%landclaim_town_name%&a!"
+player-joined: "&7%player_name% &ahas joined the town!"
+not-invited: "&cYou are not invited to that town!"
+
+# Town Leave
+town-left: "&aYou have left &7%landclaim_town_name%&a!"
+player-left: "&7%player_name% &chas left the town!"
+must-disband: "&cYou cannot leave a town as mayor, you must disband!"
+
+# Town Invite
+town-invite: "&aYou have been invited to &7%landclaim_town_name%&a!"
+player-invite: "&7%player_name% &ahas been invited to the town!"
+cannot-invite-self: "&cYou cannot invite yourself!"
+player-already-in-town: "&cThat player is already in a town!"
+
+# Town Claim
+chunk-already-claimed: "&cThis chunk is already claimed!"
+chunk-not-bordering: "&cThis chunk does not border &7%landclaim_town_name%'s preexisting claim."
+unable-to-claim-chunk: "&cYou are unable to claim this chunk!"
+claim-success: "&aYou have successfully claimed this chunk."
+
+# Town Unclaim
+chunk-not-claimed: "&cThis chunk is not claimed!"
+chunk-unclaimed: "&aThis chunk is no longer claimed!"
+
+# Town Promote
+player-not-in-town: "&aThat player is not in your town!"
+
+# Town Info
+# This one is a little different; format as one list item per message line.
+town-info:
+  - "&aTown Info"
+  - ""
+  - "&aName: &7%landclaim_town_name%"
+  - "&aDescription: &7%landclaim_town_description%"
+  - "&aPlayers: &7%landclaim_town_citizens_colored%"

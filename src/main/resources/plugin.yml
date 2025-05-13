@@ -1,0 +1,66 @@
+name: LandClaim
+main: me.rileycalhoun.landclaim.LandClaim
+version: 1.0
+author: "Riley Calhoun"
+api-version: 1.13
+description: A landclaim plugin with Towns.
+database: false
+depend:
+  - PlaceholderAPI
+  - Vault
+
+commands:
+  town:
+    description: Manage your town.
+    aliases: [t]
+
+permissions:
+  landclaim.*:
+    description: All landclaim permissions
+    default: op
+    children:
+      landclaim.town.create: true
+      landclaim.town.invite: true
+      landclaim.town.join: true
+      landclaim.town.leave: true
+      landclaim.town.promote: true
+      landclaim.town.demote: true
+      landclaim.town.disband.*: true
+
+  landclaim.town.create:
+    description: Create a town
+    default: true
+
+  landclaim.town.invite:
+    description: Invite players to a town
+    default: true
+
+  landclaim.town.join:
+    description: Join a town
+    default: true
+
+  landclaim.town.leave:
+    description: Leave a town
+    default: true
+
+  landclaim.town.promote:
+    description: Promote a player to officer or mayor
+    default: true
+
+  landclaim.town.demote:
+    description: Demote a player from officer
+
+  landclaim.town.disband.*:
+    description: Disband any town
+    default: op
+    children:
+      landclaim.town.disband.self: true
+      landclaim.town.disband.others: true
+
+  landclaim.town.disband.self:
+    description: Disband your own town
+    default: true
+
+  landclaim.town.disband.others:
+    description: Disband another players town
+    default: op

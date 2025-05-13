@@ -1,0 +1,34 @@
+plugins {
+    id 'java'
+    id 'com.gradleup.shadow' version '9.0.0-beta13'
+}
+
+group = 'me.rileycalhoun'
+version = '1.0'
+
+repositories {
+    mavenCentral()
+    maven {
+        url = 'https://hub.spigotmc.org/nexus/content/repositories/snapshots/'
+
+        // As of Gradle 5.1, you can limit this to only those
+        // dependencies you expect from it
+        content {
+            includeGroup 'org.bukkit'
+            includeGroup 'org.spigotmc'
+        }
+    }
+
+    maven { url = 'https://oss.sonatype.org/content/repositories/snapshots' }
+    maven { url = 'https://oss.sonatype.org/content/repositories/central' }
+
+    maven { url = 'https://repo.extendedclip.com/releases/' }
+}
+
+dependencies {
+    implementation 'dev.dejvokep:boosted-yaml:1.3.6'
+
+    compileOnly 'org.jetbrains:annotations:24.0.0'
+    compileOnly 'org.spigotmc:spigot-api:1.20.2-R0.1-SNAPSHOT'
+    compileOnly 'me.clip:placeholderapi:2.11.6'
+}
