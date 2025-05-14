@@ -61,7 +61,7 @@ public class DemoteCommand extends SubCommand {
         }
 
         if (targetPlayer.getName().equalsIgnoreCase(player.getName())) {
-            player.sendMessage(format(player, "&cYou cannot demote yourself from mayor, try promoting someone instead!"));
+            player.sendMessage(format(player, language.CANNOT_DEMOTE_SELF));
             return;
         }
 
@@ -75,19 +75,18 @@ public class DemoteCommand extends SubCommand {
 
         if (args.length >= 2 && args[1].equalsIgnoreCase("confirm")) {
             if (targetCitizen.getCitizenRank() == CitizenRank.CITIZEN) {
-                player.sendMessage("&aYou cannot demote someone past a citizen! Try kicking them instead.");
+                player.sendMessage(format(player, language.CANNOT_DEMOTE_PAST_CITIZEN));
                 return;
             }
 
             targetCitizen.demote();
-            targetPlayer.sendMessage(format(player, "&cYou have been demoted to &7" + targetCitizen.getCitizenRank()));
-            player.sendMessage(format(player, "&cYou have demoted &7" + targetPlayer.getName() + "&a to &7" + targetCitizen.getCitizenRank()));
+            targetPlayer.sendMessage(format(player, language.PLAYER_DEMOTED));
+            player.sendMessage(format(player, language.DEMOTE_SUCCESS));
         } else {
             if (targetCitizen.getCitizenRank() == CitizenRank.CITIZEN) {
-                player.sendMessage("&aYou cannot demote someone past a citizen! Try kicking them instead.");
+                player.sendMessage(format(player, language.CANNOT_DEMOTE_PAST_CITIZEN));
             } else if (targetCitizen.getCitizenRank() == CitizenRank.OFFICER) {
-                player.sendMessage(format(player, "&aAre you sure you want to demote &7" + player.getName()
-                        + " &ato &7CITIZEN&a? Type /town demote " + targetPlayer.getName() + " to confirm."));
+                player.sendMessage(format(targetPlayer, language.TOWN_DEMOTE_CONFIRMATION));
             }
         }
     }

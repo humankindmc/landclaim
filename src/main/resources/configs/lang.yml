@@ -65,6 +65,19 @@ chunk-unclaimed: "&aThis chunk is no longer claimed!"
 
 # Town Promote
 player-not-in-town: "&aThat player is not in your town!"
+cannot-promote-self: "&cYou cannot promote yourself, you're already the mayor!"
+promote-confirmation-officer: "&aAre you sure you want to promote %player_name% to %7OFFICER&a? Type &7/town promote %player_name &aconfirm to confirm."
+promote-confirmation-mayor: "&aAre you sure you want to promote %player_name% to %7MAYOR&a? Type &7/town promote %player_name &aconfirm to confirm."
+promote-success: "&aYou have successfully promoted &7%player_name%&a to &7%landclaim_citizen_rank%&a!"
+player-promoted: "&You have been demoted to &7%landclaim_citizen_rank%&a!"
+
+# Town Demote
+demote-confirmation: "&aAre you sure you want to demote %player_name% to %7CITIZEN&a? Type &7/town demote %player_name &aconfirm to confirm."
+cannot-demote-self: "&cYou cannot demote yourself from mayor! Try promoting someone else."
+cannot-demote-past-citizen: "&cYou cannot demote someone past a citizen! Try kicking them instead."
+demote-success: "&aYou have successfully demoted &7%player_name%&a to &7%landclaim_citizen_rank%&a!"
+player-demoted: "&cYou have been demoted to %landclaim_citizen_rank%!"
+
 
 # Town Info
 # This one is a little different; format as one list item per message line.

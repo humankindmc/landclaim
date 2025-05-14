@@ -61,7 +61,7 @@ public class PromoteCommand extends SubCommand {
         }
 
         if (targetPlayer.getName().equalsIgnoreCase(player.getName())) {
-            player.sendMessage(format(player, "&cYou cannot promote yourself past mayor!"));
+            player.sendMessage(format(player, language.CANNOT_PROMOTE_SELF));
             return;
         }
 
@@ -76,15 +76,13 @@ public class PromoteCommand extends SubCommand {
 
         if (args.length >= 2 && args[1].equalsIgnoreCase("confirm")) {
             targetCitizen.promote();
-            targetPlayer.sendMessage(format(player, "&aYou have been promoted to &7" + targetCitizen.getCitizenRank()));
-            player.sendMessage(format(player, "&aYou have promoted &7" + targetPlayer.getName() + "&a to &7" + targetCitizen.getCitizenRank()));
+            targetPlayer.sendMessage(format(player, language.PLAYER_DEMOTED));
+            player.sendMessage(format(player, language.DEMOTE_SUCCESS));
         } else {
             if (targetCitizen.getCitizenRank() == CitizenRank.CITIZEN) {
-                player.sendMessage(format(player, "&aAre you sure you want to promote &7" + player.getName()
-                        + " &ato &7OFFICER&a? Type /town promote " + targetPlayer.getName() + " to confirm."));
+                player.sendMessage(format(targetPlayer, language.TOWN_PROMOTE_CONFIRMATION_OFFICER));
             } else if (targetCitizen.getCitizenRank() == CitizenRank.OFFICER) {
-                player.sendMessage(format(player, "&aAre you sure you want to promote &7" + player.getName()
-                        + " &ato &7MAYOR&a? Type /town promote " + targetPlayer.getName() + " to confirm."));
+                player.sendMessage(format(targetPlayer, language.TOWN_PROMOTE_CONFIRMATION_MAYOR));
             }
         }
     }

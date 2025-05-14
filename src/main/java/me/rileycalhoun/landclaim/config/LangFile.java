@@ -54,7 +54,19 @@ public class LangFile {
             PLAYER_ALREADY_IN_TOWN;
 
     /* Town Promote */
-    public String PLAYER_NOT_IN_TOWN;
+    public String PLAYER_NOT_IN_TOWN,
+            CANNOT_PROMOTE_SELF,
+            TOWN_PROMOTE_CONFIRMATION_OFFICER,
+            TOWN_PROMOTE_CONFIRMATION_MAYOR,
+            PROMOTE_SUCCESS,
+            PLAYER_PROMOTED;
+
+    /* Town Demote */
+    public String TOWN_DEMOTE_CONFIRMATION,
+            CANNOT_DEMOTE_SELF,
+            CANNOT_DEMOTE_PAST_CITIZEN,
+            DEMOTE_SUCCESS,
+            PLAYER_DEMOTED;
 
     /* Town Info */
     public String TOWN_INFO;
@@ -137,6 +149,18 @@ public class LangFile {
 
         /* Town Promote */
         PLAYER_NOT_IN_TOWN = this.langFile.getString("player-not-in-town");
+        CANNOT_PROMOTE_SELF = this.langFile.getString("cannot-promote-self");
+        TOWN_PROMOTE_CONFIRMATION_OFFICER = this.langFile.getString("town-promote-confirmation-officer");
+        TOWN_PROMOTE_CONFIRMATION_MAYOR = this.langFile.getString("town-promote-confirmation-mayor");
+        PROMOTE_SUCCESS = this.langFile.getString("promote-success");
+        PLAYER_PROMOTED = this.langFile.getString("player-promoted");
+
+        /* Town Demote */
+        TOWN_DEMOTE_CONFIRMATION = this.langFile.getString("town-demote-confirmation");
+        CANNOT_DEMOTE_SELF = this.langFile.getString("cannot-demote-self");
+        CANNOT_DEMOTE_PAST_CITIZEN = this.langFile.getString("cannot-demote-past-citizen");
+        DEMOTE_SUCCESS = this.langFile.getString("demote-success");
+        PLAYER_DEMOTED = this.langFile.getString("player-demote");
 
         /* Town Info */
         TOWN_INFO = String.join("\n", this.langFile.getStringList("town-info"));
