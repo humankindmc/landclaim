@@ -68,6 +68,7 @@ public class LandClaim extends JavaPlugin {
         getLogger().info("Initializing caches...");
         this.citizensCache = new CitizensCache(100);
         this.townsCache = new TownsCache(this, 100);
+        this.inviteCache = new InviteCache(100);
 
         getLogger().info("Initializing commands...");
         registerCommands();
@@ -134,8 +135,6 @@ public class LandClaim extends JavaPlugin {
     }
 
     private void registerEvents() {
-        registerEvent(new MovementListener(townsCache));
-        registerEvent(new ClaimListener(townsCache));
         registerEvent(new ConnectionListener(this));
     }
 

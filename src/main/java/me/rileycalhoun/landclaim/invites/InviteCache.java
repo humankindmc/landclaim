@@ -1,6 +1,5 @@
 package me.rileycalhoun.landclaim.invites;
 
-import me.rileycalhoun.landclaim.citizens.CitizensCache;
 import me.rileycalhoun.landclaim.towns.Town;
 import org.bukkit.OfflinePlayer;
 

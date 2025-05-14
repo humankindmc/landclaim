@@ -3,11 +3,7 @@ package me.rileycalhoun.landclaim.commands.subcommands;
 import me.rileycalhoun.landclaim.LandClaim;
 import me.rileycalhoun.landclaim.citizens.Citizen;
 import me.rileycalhoun.landclaim.commands.SubCommand;
-import me.rileycalhoun.landclaim.config.LangFile;
-import me.rileycalhoun.landclaim.towns.Town;
-import me.rileycalhoun.landclaim.towns.TownsCache;
 import org.bukkit.entity.Player;
-import org.bukkit.plugin.java.JavaPlugin;
 
 import java.util.Optional;
 
