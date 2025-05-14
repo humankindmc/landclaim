@@ -37,7 +37,6 @@ public class TownCommand implements CommandExecutor {
         subCommands.add(new InfoCommand(plugin));
         subCommands.add(new CreateCommand(plugin));
         subCommands.add(new DisbandCommand(plugin));
-        subCommands.add(new ClaimCommand(plugin));
         subCommands.add(new InviteCommand(plugin));
         subCommands.add(new PromoteCommand(plugin));
         subCommands.add(new JoinCommand(plugin));

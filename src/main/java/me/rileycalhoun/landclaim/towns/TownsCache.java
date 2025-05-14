@@ -2,7 +2,6 @@ package me.rileycalhoun.landclaim.towns;
 
 import me.rileycalhoun.landclaim.LandClaim;
 import me.rileycalhoun.landclaim.citizens.Citizen;
-import org.bukkit.OfflinePlayer;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.*;

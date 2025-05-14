@@ -2,7 +2,6 @@ package me.rileycalhoun.landclaim.citizens;
 
 import me.rileycalhoun.landclaim.towns.Town;
 import org.bukkit.Bukkit;
-import org.bukkit.ChatColor;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;

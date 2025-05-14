@@ -1,6 +1,5 @@
 package me.rileycalhoun.landclaim.invites;
 
-import me.rileycalhoun.landclaim.citizens.Citizen;
 import me.rileycalhoun.landclaim.citizens.CitizensCache;
 import me.rileycalhoun.landclaim.towns.Town;
 import org.bukkit.OfflinePlayer;
@@ -12,10 +11,8 @@ import java.util.Map;
 public class InviteCache {
 
     private final LinkedHashMap<Town, ArrayList<OfflinePlayer>> invites;
-    private final CitizensCache citizensCache;
 
-    public InviteCache(int max_size, CitizensCache citizensCache) {
-        this.citizensCache = citizensCache;
+    public InviteCache(int max_size) {
         this.invites = new LinkedHashMap<>(max_size+1, 0.75f, true) {
 
             @Override

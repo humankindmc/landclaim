@@ -4,9 +4,9 @@ public enum CitizenRank {
 
     CITIZEN(1), OFFICER(2), MAYOR(3);
 
-    private int value;
+    private final int value;
 
-    CitizenRank(int value) {
+    CitizenRank(final int value) {
         this.value = value;
     }
 
