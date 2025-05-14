@@ -19,12 +19,19 @@ permissions:
     description: All landclaim permissions
     default: op
     children:
+      landclaim.town.*: true
+
+  landclaim.town.*:
+    description: All permissions relating to towns
+    default: op
+    children:
       landclaim.town.create: true
       landclaim.town.invite: true
       landclaim.town.join: true
       landclaim.town.leave: true
       landclaim.town.promote: true
       landclaim.town.demote: true
+      landclaim.town.kick: true
       landclaim.town.disband.*: true
 
   landclaim.town.create:
@@ -49,6 +56,11 @@ permissions:
 
   landclaim.town.demote:
     description: Demote a player from officer
+    default: true
+
+  landclaim.town.kick:
+    description: Kick a citizen from your town
+    default: true
 
   landclaim.town.disband.*:
     description: Disband any town

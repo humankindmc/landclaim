@@ -68,6 +68,9 @@ public class LangFile {
             DEMOTE_SUCCESS,
             PLAYER_DEMOTED;
 
+    public String PLAYER_KICKED,
+            KICK_SUCCESS;
+
     /* Town Info */
     public String TOWN_INFO;
 
@@ -161,6 +164,10 @@ public class LangFile {
         CANNOT_DEMOTE_PAST_CITIZEN = this.langFile.getString("cannot-demote-past-citizen");
         DEMOTE_SUCCESS = this.langFile.getString("demote-success");
         PLAYER_DEMOTED = this.langFile.getString("player-demote");
+
+        /* Town Kick */
+        KICK_SUCCESS = this.langFile.getString("kick-success");
+        PLAYER_KICKED = this.langFile.getString("player-kicked");
 
         /* Town Info */
         TOWN_INFO = String.join("\n", this.langFile.getStringList("town-info"));

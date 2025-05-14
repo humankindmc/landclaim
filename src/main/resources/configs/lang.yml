@@ -78,6 +78,10 @@ cannot-demote-past-citizen: "&cYou cannot demote someone past a citizen! Try kic
 demote-success: "&aYou have successfully demoted &7%player_name%&a to &7%landclaim_citizen_rank%&a!"
 player-demoted: "&cYou have been demoted to %landclaim_citizen_rank%!"
 
+# Town Kick
+kick-success: "&aYou have successfully kicked &7%player_name% &afrom &7%landclaim_town_name%&a!"
+player-kicked: "&aYou have been kicked from &7%town_name%&a!"
+
 
 # Town Info
 # This one is a little different; format as one list item per message line.
