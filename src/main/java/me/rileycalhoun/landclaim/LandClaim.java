@@ -3,7 +3,9 @@ package me.rileycalhoun.landclaim;
 import me.rileycalhoun.landclaim.citizens.CitizensCache;
 import me.rileycalhoun.landclaim.commands.TownCommand;
 import me.rileycalhoun.landclaim.config.LangFile;
+import me.rileycalhoun.landclaim.invites.InviteCache;
 import me.rileycalhoun.landclaim.listener.ClaimListener;
+import me.rileycalhoun.landclaim.listener.ConnectionListener;
 import me.rileycalhoun.landclaim.listener.MovementListener;
 import me.rileycalhoun.landclaim.towns.TownsCache;
 import org.bukkit.Bukkit;
@@ -19,6 +21,7 @@ public class LandClaim extends JavaPlugin {
 
     private CitizensCache citizensCache;
     private TownsCache townsCache;
+    private InviteCache inviteCache;
 
     private LangFile langFile;
 
@@ -116,6 +119,10 @@ public class LandClaim extends JavaPlugin {
         return townsCache;
     }
 
+    public InviteCache getInviteCache() {
+        return inviteCache;
+    }
+
     public LangFile getLangFile() {
         return langFile;
     }
@@ -131,6 +138,7 @@ public class LandClaim extends JavaPlugin {
     private void registerEvents() {
         registerEvent(new MovementListener(townsCache));
         registerEvent(new ClaimListener(townsCache));
+        registerEvent(new ConnectionListener(this));
     }
 
     private void registerEvent(Listener event) {
@@ -138,7 +146,7 @@ public class LandClaim extends JavaPlugin {
     }
 
     private void registerCommands() {
-        registerCommand("town", new TownCommand(this, townsCache, langFile));
+        registerCommand("town", new TownCommand(this));
     }
 
     private void registerCommand(
@@ -154,7 +162,7 @@ public class LandClaim extends JavaPlugin {
             return;
         }
 
-        command.setExecutor(new TownCommand(this, townsCache, langFile));
+        command.setExecutor(executor);
     }
 
 }

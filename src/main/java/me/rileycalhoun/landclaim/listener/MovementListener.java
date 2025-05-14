@@ -23,56 +23,56 @@ public class MovementListener implements Listener {
         this.townsCache = townsCache;
     }
 
-    @EventHandler
-    public void onPlayerMove(PlayerMoveEvent event) {
-        if (event.getTo() == null) return;
-
-        Player player = event.getPlayer();
-        Chunk chunk = event.getTo().getChunk();
-        Optional<Town> currentTown = townsCache.getClaimManager().getChunkOwner(chunk);
-
-        if (!movementTracker.containsKey(player)) {
-            movementTracker.put(player, currentTown);
-            return;
-        }
-
-        Optional<Town> storedTown = movementTracker.get(player);
-
-        if(!storedTown.equals(currentTown)) {
-            movementTracker.replace(player, currentTown);
-            if (currentTown.isPresent()) {
-                PlayerEnterTownEvent newEvent = new PlayerEnterTownEvent(
-                        event.getPlayer(), currentTown.get()
-                );
-
-                Bukkit.getServer().getPluginManager().callEvent(newEvent);
-                if (newEvent.isCancelled()) {
-                    event.setCancelled(true);
-                    return;
-                }
-
-                player.sendTitle(ChatColor.GREEN + currentTown.get().getName(),
-                        ChatColor.GRAY + currentTown.get().getDescription(),
-                        10, 60, 10);
-            } else {
-                // Stored tow must be present if they are not equal; Leaving town.
-                assert storedTown.isPresent();
-
-                PlayerExitTownEvent newEvent = new PlayerExitTownEvent(
-                        event.getPlayer(), storedTown.get()
-                );
-
-                Bukkit.getServer().getPluginManager().callEvent(newEvent);
-                if (newEvent.isCancelled()) {
-                    event.setCancelled(true);
-                    return;
-                }
-
-                player.sendTitle(ChatColor.DARK_GREEN + "Wilderness",
-                        ChatColor.GRAY + "A vast, unexplored territory",
-                        10, 60, 10);
-            }
-        }
-    }
+//    @EventHandler
+//    public void onPlayerMove(PlayerMoveEvent event) {
+//        if (event.getTo() == null) return;
+//
+//        Player player = event.getPlayer();
+//        Chunk chunk = event.getTo().getChunk();
+//        Optional<Town> currentTown = townsCache.getClaimManager().getChunkOwner(chunk);
+//
+//        if (!movementTracker.containsKey(player)) {
+//            movementTracker.put(player, currentTown);
+//            return;
+//        }
+//
+//        Optional<Town> storedTown = movementTracker.get(player);
+//
+//        if(!storedTown.equals(currentTown)) {
+//            movementTracker.replace(player, currentTown);
+//            if (currentTown.isPresent()) {
+//                PlayerEnterTownEvent newEvent = new PlayerEnterTownEvent(
+//                        event.getPlayer(), currentTown.get()
+//                );
+//
+//                Bukkit.getServer().getPluginManager().callEvent(newEvent);
+//                if (newEvent.isCancelled()) {
+//                    event.setCancelled(true);
+//                    return;
+//                }
+//
+//                player.sendTitle(ChatColor.GREEN + currentTown.get().getName(),
+//                        ChatColor.GRAY + currentTown.get().getDescription(),
+//                        10, 60, 10);
+//            } else {
+//                // Stored tow must be present if they are not equal; Leaving town.
+//                assert storedTown.isPresent();
+//
+//                PlayerExitTownEvent newEvent = new PlayerExitTownEvent(
+//                        event.getPlayer(), storedTown.get()
+//                );
+//
+//                Bukkit.getServer().getPluginManager().callEvent(newEvent);
+//                if (newEvent.isCancelled()) {
+//                    event.setCancelled(true);
+//                    return;
+//                }
+//
+//                player.sendTitle(ChatColor.DARK_GREEN + "Wilderness",
+//                        ChatColor.GRAY + "A vast, unexplored territory",
+//                        10, 60, 10);
+//            }
+//        }
+//    }
 
 }

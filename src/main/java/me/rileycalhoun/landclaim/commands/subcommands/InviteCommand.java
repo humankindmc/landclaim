@@ -1,10 +1,13 @@
 package me.rileycalhoun.landclaim.commands.subcommands;
 
+import me.rileycalhoun.landclaim.LandClaim;
+import me.rileycalhoun.landclaim.citizens.Citizen;
+import me.rileycalhoun.landclaim.citizens.CitizenRank;
 import me.rileycalhoun.landclaim.commands.SubCommand;
 import me.rileycalhoun.landclaim.config.LangFile;
 import me.rileycalhoun.landclaim.towns.Town;
 import me.rileycalhoun.landclaim.towns.TownsCache;
-import me.rileycalhoun.landclaim.towns.invites.InviteManager;
+import me.rileycalhoun.landclaim.invites.InviteCache;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.java.JavaPlugin;
 
@@ -12,10 +15,10 @@ import java.util.Optional;
 
 public class InviteCommand extends SubCommand {
 
-    private final InviteManager inviteManager;
-    public InviteCommand(JavaPlugin plugin, TownsCache townsCache, LangFile language) {
+    private final InviteCache inviteCache;
+    public InviteCommand(LandClaim plugin) {
         super(plugin);
-        this.inviteManager = townsCache.getInviteManager();
+        this.inviteCache = plugin.getInviteCache();
     }
 
     @Override
@@ -49,9 +52,14 @@ public class InviteCommand extends SubCommand {
     }
 
     @Override
-    public void execute(Player player, String[] args) {
-        Optional<Town> town = townsCache.getTownByPlayer(player);
-        assert town.isPresent();
+    public void execute(Citizen citizen, Player player, String[] args) {
+        assert citizen.getTownUniqueId() != null;
+        assert citizen.getCitizenRank() != null;
+
+        if (citizen.getCitizenRank().getValue() < CitizenRank.OFFICER.getValue()) {
+            player.sendMessage(format(player, language.TOWN_OFFICER_REQUIRED));
+            return;
+        }
 
         if (args[0].equalsIgnoreCase(player.getName())) {
             player.sendMessage(format(player, language.CANNOT_INVITE_SELF));
@@ -64,15 +72,22 @@ public class InviteCommand extends SubCommand {
             return;
         }
 
-        if (townsCache.getTownByPlayer(invited).isPresent()) {
+        Citizen invitedCitizen = citizensCache.getCitizenByUUID(invited.getUniqueId());
+        assert invitedCitizen != null;
+
+        if (townsCache.getTownByUUID(invitedCitizen.getTownUniqueId()) != null) {
             player.sendMessage(format(player, language.PLAYER_ALREADY_IN_TOWN));
             return;
         }
 
-        inviteManager.invite(town.get(), invited);
+        Town town = townsCache.getTownByUUID(citizen.getTownUniqueId());
+        inviteCache.invite(town, invited);
 
         invited.sendMessage(format(player, language.TOWN_INVITE));
-        town.get().broadcastMessage(format(player, language.PLAYER_INVITE));
+        citizensCache.getCitizensInTown(town).forEach(c ->
+                c.sendMessageIfOnline(
+                        format(player, language.TOWN_INVITE)
+                ));
     }
 
 }

@@ -3,10 +3,13 @@ package me.rileycalhoun.landclaim.commands.subcommands;
 import me.rileycalhoun.landclaim.LandClaim;
 import me.rileycalhoun.landclaim.citizens.Citizen;
 import me.rileycalhoun.landclaim.citizens.CitizenRank;
+import me.rileycalhoun.landclaim.claims.ClaimTools;
 import me.rileycalhoun.landclaim.commands.SubCommand;
 import me.rileycalhoun.landclaim.towns.Town;
 import me.rileycalhoun.landclaim.claims.ClaimArea;
+import me.rileycalhoun.landclaim.utils.InventoryUtils;
 import org.bukkit.Bukkit;
+import org.bukkit.ChatColor;
 import org.bukkit.Chunk;
 import org.bukkit.entity.Player;
 
@@ -49,8 +52,7 @@ public class ClaimCommand extends SubCommand {
     }
 
     @Override
-    public void execute(Citizen citizen, String[] args) {
-        Player player = (Player) citizen.getPlayer();
+    public void execute(Citizen citizen, Player player, String[] args) {
         assert citizen.getTownUniqueId() != null;
         assert citizen.getCitizenRank() != null;
 
@@ -60,32 +62,16 @@ public class ClaimCommand extends SubCommand {
             return;
         }
 
-        Chunk chunk = player.getLocation().getChunk();
-        Optional<Town> claimer = claimManager.getChunkOwner(chunk);
-        if (claimer.isPresent()) {
-            player.sendMessage(format(player, language.CHUNK_ALREADY_CLAIMED));
+        if (InventoryUtils.isInInventory(player.getInventory(), ClaimTools.getClaimWand())) {
+            player.sendMessage(ChatColor.RED + "You already have the Claim Wand!");
             return;
         }
 
+        player.getInventory().addItem(
+                ClaimTools.getClaimWand()
+        );
 
-        TownClaimEvent event = new TownClaimEvent(town.get(), chunk);
-        Bukkit.getServer().getPluginManager().callEvent(event);
-        if (event.isCancelled()) {
-            player.sendMessage(format(player, language.UNABLE_TO_CLAIM_CHUNK));
-            return;
-        }
-
-        ClaimArea mainClaim = town.get().getMainClaim();
-        Optional<ClaimError> claimError = mainClaim.claim(chunk);
-        if (claimError.isEmpty()) {
-            player.sendMessage(format(player, language.CLAIM_SUCCESS));
-        } else {
-            if (claimError.get() == ClaimError.ALREADY_CLAIMED) {
-                player.sendMessage(format(player, language.CHUNK_NOT_BORDERING));
-            } else {
-                player.sendMessage(format(player, language.SOMETHING_WENT_WRONG));
-            }
-        }
+        player.sendMessage(ChatColor.GREEN + "You have been given a " + ChatColor.GRAY + "claim wand" + ChatColor.GREEN + "!");
     }
 
 }

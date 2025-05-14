@@ -1,6 +1,9 @@
 package me.rileycalhoun.landclaim.commands;
 
 import me.clip.placeholderapi.PlaceholderAPI;
+import me.rileycalhoun.landclaim.LandClaim;
+import me.rileycalhoun.landclaim.citizens.Citizen;
+import me.rileycalhoun.landclaim.citizens.CitizensCache;
 import me.rileycalhoun.landclaim.commands.subcommands.*;
 import me.rileycalhoun.landclaim.config.LangFile;
 import me.rileycalhoun.landclaim.towns.TownsCache;
@@ -22,21 +25,23 @@ public class TownCommand implements CommandExecutor {
     private final List<SubCommand> subCommands;
     private final String helpMessage;
     private final TownsCache townsCache;
+    private final CitizensCache citizensCache;
     private final LangFile language;
 
-    public TownCommand(JavaPlugin plugin, TownsCache townsCache, LangFile language) {
+    public TownCommand(LandClaim plugin) {
         this.subCommands = new ArrayList<>();
-        this.townsCache = townsCache;
-        this.language = language;
+        this.townsCache = plugin.getTownsCache();
+        this.citizensCache = plugin.getCitizensCache();
+        this.language = plugin.getLangFile();
 
-        subCommands.add(new InfoCommand(plugin, townsCache, language));
-        subCommands.add(new CreateCommand(plugin, townsCache, language));
-        subCommands.add(new DisbandCommand(plugin, townsCache, language));
-        subCommands.add(new ClaimCommand(plugin, townsCache, language));
-        subCommands.add(new UnclaimCommand(plugin, townsCache, language));
-        subCommands.add(new InviteCommand(plugin, townsCache, language));
-        subCommands.add(new JoinCommand(plugin, townsCache, language));
-        subCommands.add(new LeaveCommand(plugin, townsCache, language));
+        subCommands.add(new InfoCommand(plugin));
+        subCommands.add(new CreateCommand(plugin));
+        subCommands.add(new DisbandCommand(plugin));
+        subCommands.add(new ClaimCommand(plugin));
+        subCommands.add(new InviteCommand(plugin));
+        subCommands.add(new PromoteCommand(plugin));
+        subCommands.add(new JoinCommand(plugin));
+        subCommands.add(new LeaveCommand(plugin));
 
         StringBuilder stringBuilder = new StringBuilder();
         for (int i = 0; i < subCommands.size(); i++) {
@@ -57,7 +62,7 @@ public class TownCommand implements CommandExecutor {
         }
 
         this.helpMessage = stringBuilder.toString();
-        subCommands.add(new HelpCommand(plugin, townsCache, language, helpMessage));
+        subCommands.add(new HelpCommand(plugin, helpMessage));
     }
 
     private Optional<SubCommand> getSubCommandByName(String name) {
@@ -96,7 +101,10 @@ public class TownCommand implements CommandExecutor {
                 return true;
             }
 
-            if (subCommand.getRequireTown() && townsCache.getTownByPlayer(player).isEmpty()) {
+            Citizen citizen = citizensCache.getCitizenByUUID(player.getUniqueId());
+            assert citizen != null;
+
+            if (subCommand.getRequireTown() && townsCache.getTownByUUID(citizen.getTownUniqueId()) == null) {
                 player.sendMessage(
                         ChatColor.translateAlternateColorCodes('&',
                                 PlaceholderAPI.setPlaceholders(player, language.TOWN_REQUIRED))
@@ -110,7 +118,7 @@ public class TownCommand implements CommandExecutor {
                 return true;
             }
 
-            subCommand.execute(player, newArgs);
+            subCommand.execute(citizen, player, newArgs);
         }
 
         return true;

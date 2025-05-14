@@ -1,5 +1,7 @@
 package me.rileycalhoun.landclaim.commands.subcommands;
 
+import me.rileycalhoun.landclaim.LandClaim;
+import me.rileycalhoun.landclaim.citizens.Citizen;
 import me.rileycalhoun.landclaim.commands.SubCommand;
 import me.rileycalhoun.landclaim.config.LangFile;
 import me.rileycalhoun.landclaim.towns.Town;
@@ -11,7 +13,7 @@ import java.util.Optional;
 
 public class InfoCommand extends SubCommand {
 
-    public InfoCommand(JavaPlugin plugin, TownsCache townsCache, LangFile language) {
+    public InfoCommand(LandClaim plugin) {
         super(plugin);
     }
 
@@ -46,9 +48,7 @@ public class InfoCommand extends SubCommand {
     }
 
     @Override
-    public void execute(Player player, String[] args) {
-        Optional<Town> town = townsCache.getTownByPlayer(player);
-        assert town.isPresent();
+    public void execute(Citizen citizen, Player player, String[] args) {
         player.sendMessage(format(player, language.TOWN_INFO));
     }
 }

@@ -1,5 +1,8 @@
 package me.rileycalhoun.landclaim.commands.subcommands;
 
+import me.rileycalhoun.landclaim.LandClaim;
+import me.rileycalhoun.landclaim.citizens.Citizen;
+import me.rileycalhoun.landclaim.citizens.CitizenRank;
 import me.rileycalhoun.landclaim.commands.SubCommand;
 import me.rileycalhoun.landclaim.config.LangFile;
 import me.rileycalhoun.landclaim.towns.Town;
@@ -16,7 +19,7 @@ public class DisbandCommand extends SubCommand {
 
     public final HashMap<OfflinePlayer, Town> disbandConfirmation;
 
-    public DisbandCommand(JavaPlugin plugin, TownsCache townsCache, LangFile language) {
+    public DisbandCommand(LandClaim plugin) {
         super(plugin);
         disbandConfirmation = new HashMap<>();
     }
@@ -48,22 +51,25 @@ public class DisbandCommand extends SubCommand {
 
     @Override
     public boolean getRequireTown() {
-        return true;
+        return false;
     }
 
     @Override
-    public void execute(Player player, String[] args) {
+    public void execute(Citizen citizen, Player player, String[] args) {
         if (args.length == 0) {
-            Optional<Town> town = townsCache.getTownByPlayer(player);
-            assert town.isPresent();
+            Town town = townsCache.getTownByUUID(citizen.getTownUniqueId());
+            if (town == null) {
+                player.sendMessage(format(player, language.PLAYER_NOT_IN_TOWN));
+                return;
+            }
 
             // TODO: Make the player confirm disbanding via '/town disband confirm'
-            if (!town.get().isMayor(player)) {
+            if (citizen.getCitizenRank() != CitizenRank.MAYOR) {
                 player.sendMessage(format(player, language.TOWN_MAYOR_REQUIRED));
                 return;
             }
 
-            disbandConfirmation.put(player, town.get());
+            disbandConfirmation.put(player, town);
             player.sendMessage(format(player, language.TOWN_DISBAND_CONFIRMATION));
         } else {
             if (args[0].equalsIgnoreCase("confirm")) {
@@ -73,30 +79,23 @@ public class DisbandCommand extends SubCommand {
                 }
 
                 Town town = disbandConfirmation.get(player);
-                TownDisbandEvent event = new TownDisbandEvent(town);
-                Bukkit.getServer().getPluginManager().callEvent(event);
-
-                if (event.isCancelled()) {
-                    player.sendMessage(format(player, language.SOMETHING_WENT_WRONG));
-                } else {
-                    disbandConfirmation.remove(player);
-                    plugin.getServer().broadcastMessage(format(player, language.PLAYER_DISBAND_TOWN));
-                    townsCache.disbandTown(town);
-                }
+                disbandConfirmation.remove(player);
+                plugin.getServer().broadcastMessage(format(player, language.PLAYER_DISBAND_TOWN));
+                townsCache.disbandTown(town);
             } else {
                 if (!player.hasPermission("landclaim.town.disband.other")) {
                     player.sendMessage(format(player, language.NO_PERMISSION));
                     return;
                 }
 
-                Optional<Town> town = townsCache.getTownByName(args[0]);
+                Town town = townsCache.getTownByName(args[0]);
 
-                if (town.isEmpty()) {
+                if (town == null) {
                     player.sendMessage(format(player, language.TOWN_DOES_NOT_EXIST));
                     return;
                 }
 
-                disbandConfirmation.put(player, town.get());
+                disbandConfirmation.put(player, town);
                 player.sendMessage(format(player, language.TOWN_DISBAND_CONFIRMATION));
             }
         }

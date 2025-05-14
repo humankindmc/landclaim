@@ -1,5 +1,8 @@
 package me.rileycalhoun.landclaim.commands.subcommands;
 
+import me.rileycalhoun.landclaim.LandClaim;
+import me.rileycalhoun.landclaim.citizens.Citizen;
+import me.rileycalhoun.landclaim.citizens.CitizenRank;
 import me.rileycalhoun.landclaim.commands.SubCommand;
 import me.rileycalhoun.landclaim.config.LangFile;
 import me.rileycalhoun.landclaim.towns.Town;
@@ -11,7 +14,7 @@ import java.util.Optional;
 
 public class CreateCommand extends SubCommand {
 
-    public CreateCommand(JavaPlugin plugin, TownsCache townsCache, LangFile language) {
+    public CreateCommand(LandClaim plugin) {
         super(plugin);
     }
 
@@ -46,23 +49,26 @@ public class CreateCommand extends SubCommand {
     }
 
     @Override
-    public void execute(Player player, String[] args) {
+    public void execute(Citizen citizen, Player player, String[] args) {
         String townName = args[0];
         if (townName.equalsIgnoreCase("confirm")) {
             player.sendMessage(format(player, language.TOWN_ILLEGAL_NAME));
             return;
         }
 
-        if(townsCache.getTownByName(townName).isPresent()) {
+        if(townsCache.getTownByName(townName) != null) {
             player.sendMessage(format(player, language.TOWN_ALREADY_EXISTS));
             return;
         }
 
-        Optional<Town> optionalTown = townsCache.createTown(townName, player);
-        if (optionalTown.isEmpty()) {
+        Town town = townsCache.createTown(townName);
+        if (town == null) {
             player.sendMessage(format(player, language.SOMETHING_WENT_WRONG));
             return;
         }
+
+        citizen.setTownUniqueId(town.getUniqueId());
+        citizen.setCitizenRank(CitizenRank.MAYOR);
 
         player.sendMessage(format(player, language.TOWN_CREATED));
         plugin.getServer().broadcastMessage(format(player, language.PLAYER_CREATE_TOWN));

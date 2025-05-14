@@ -1,5 +1,8 @@
 package me.rileycalhoun.landclaim.commands.subcommands;
 
+import me.rileycalhoun.landclaim.LandClaim;
+import me.rileycalhoun.landclaim.citizens.Citizen;
+import me.rileycalhoun.landclaim.citizens.CitizenRank;
 import me.rileycalhoun.landclaim.commands.SubCommand;
 import me.rileycalhoun.landclaim.config.LangFile;
 import me.rileycalhoun.landclaim.towns.Town;
@@ -11,7 +14,7 @@ import java.util.Optional;
 
 public class LeaveCommand extends SubCommand {
 
-    public LeaveCommand(JavaPlugin plugin, TownsCache townsCache, LangFile language) {
+    public LeaveCommand(LandClaim plugin) {
         super(plugin);
     }
 
@@ -46,27 +49,18 @@ public class LeaveCommand extends SubCommand {
     }
 
     @Override
-    public void execute(Player player, String[] args) {
-        Optional<Town> town = townsCache.getTownByPlayer(player);
-        assert town.isPresent();
+    public void execute(Citizen citizen, Player player, String[] args) {
+        Town town = townsCache.getTownByUUID(citizen.getTownUniqueId());
+        assert town != null;
 
-        assert town.get().getCitizen(player).isPresent();
-        TownRank rank = town.get()
-                .getCitizen(player)
-                .get()
-                .getRank();
-        if (rank == TownRank.MAYOR) {
+        if (citizen.getCitizenRank() == CitizenRank.MAYOR) {
             player.sendMessage(format(player, language.MUST_DISBAND));
             return;
         }
 
-        boolean result = town.get().removePlayer(player);
-        if (!result) {
-            player.sendMessage(format(player, language.SOMETHING_WENT_WRONG));
-            return;
-        }
-
+        citizen.leaveTown();
         player.sendMessage(format(player, language.TOWN_LEFT));
-        town.get().broadcastMessage(format(player, language.PLAYER_LEFT));
+        citizensCache.getCitizensInTown(town).forEach(c ->
+                c.sendMessageIfOnline(format(player, language.PLAYER_LEFT)));
     }
 }

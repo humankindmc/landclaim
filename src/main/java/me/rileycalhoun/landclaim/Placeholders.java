@@ -1,6 +1,7 @@
 package me.rileycalhoun.landclaim;
 
 import me.clip.placeholderapi.expansion.PlaceholderExpansion;
+import me.rileycalhoun.landclaim.citizens.Citizen;
 import me.rileycalhoun.landclaim.towns.Town;
 import org.bukkit.ChatColor;
 import org.bukkit.OfflinePlayer;
@@ -8,7 +9,9 @@ import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+import java.util.List;
 import java.util.Optional;
+import java.util.UUID;
 
 public class Placeholders extends PlaceholderExpansion {
 
@@ -49,77 +52,72 @@ public class Placeholders extends PlaceholderExpansion {
     }
 
     public @Nullable String getPlaceholders(OfflinePlayer player, @NotNull String params) {
+        Citizen citizen = landClaim.getCitizensCache().getCitizenByUUID(player.getUniqueId());
+        assert citizen != null;
+
         if (params.equalsIgnoreCase("town_name")) {
-            return landClaim.getTownManager()
-                    .getTownByPlayer(player)
-                    .map(Town::getName)
-                    .orElse(null);
+            Town town = landClaim.getTownsCache().getTownByUUID(citizen.getTownUniqueId());
+            return town == null ? null : town.getName();
         }
 
-        if (params.equalsIgnoreCase("town_description")) {
-            return landClaim.getTownManager()
-                    .getTownByPlayer(player)
-                    .map(Town::getDescription)
-                    .orElse(null);
+        if (params.equalsIgnoreCase("town_motd")) {
+            Town town = landClaim.getTownsCache().getTownByUUID(citizen.getTownUniqueId());
+            return town == null ? null : town.getMotd();
         }
 
+        // TODO: Implement this
         if (params.equalsIgnoreCase("town_mayor")) {
-            return landClaim.getTownManager()
-                    .getTownByPlayer(player)
-                    .map(t -> t.getMayor()
-                            .getPlayer()
-                            .getName())
-                    .orElse(null);
+            return null;
         }
 
         if (params.equalsIgnoreCase("town_citizens_colored")) {
-            Optional<Town> optionalTown = landClaim.getTownManager().getTownByPlayer(player);
-            if (optionalTown.isEmpty()) return null;
+            Town town = landClaim.getTownsCache().getTownByUUID(citizen.getTownUniqueId());
+            if (town == null) return null;
 
-            Town town = optionalTown.get();
-            StringBuilder infoMessage = new StringBuilder();
-
-            for (int i = 0; i < town.getCitizens().size(); i++) {
-                TownCitizen citizen = town.getCitizens().get(i);
-
-                OfflinePlayer citizenPlayer = citizen.getPlayer();
-                if (citizenPlayer.isOnline()) {
-                    infoMessage.append(ChatColor.GREEN)
-                            .append(citizenPlayer.getName());
-                } else {
-                    infoMessage.append(ChatColor.RED)
-                            .append(citizenPlayer.getName());
-                }
-
-                if (i < town.getCitizens().size() - 1) {
-                    infoMessage.append(ChatColor.GRAY)
-                            .append(",");
-                }
-            }
-
-            return infoMessage.toString();
+            List<Citizen> citizens = landClaim.getCitizensCache()
+                    .getCitizensInTown(town);
+            return formatCitizens(citizens, true);
         }
+
         if (params.equalsIgnoreCase("town_citizens")) {
-            Optional<Town> optionalTown = landClaim.getTownManager().getTownByPlayer(player);
-            if (optionalTown.isEmpty()) return null;
+            Town town = landClaim.getTownsCache().getTownByUUID(citizen.getTownUniqueId());
+            if (town == null) return null;
 
-            Town town = optionalTown.get();
-            StringBuilder infoMessage = new StringBuilder();
-
-            for (int i = 0; i < town.getCitizens().size(); i++) {
-                TownCitizen citizen = town.getCitizens().get(i);
-
-                OfflinePlayer citizenPlayer = citizen.getPlayer();
-                infoMessage.append(citizenPlayer.getName());
-
-                if (i < town.getCitizens().size() - 1) {
-                    infoMessage.append(",");
-                }
-            }
-
-            return infoMessage.toString();
+            List<Citizen> citizens = landClaim.getCitizensCache()
+                    .getCitizensInTown(town);
+            return formatCitizens(citizens, false);
         }
 
         return null;
     }
+
+    private String formatCitizens(List<Citizen> citizens, boolean color) {
+        StringBuilder infoMessage = new StringBuilder();
+
+        for (int i = 0; i < citizens.size(); i++) {
+            Citizen citizen = citizens.get(i);
+            OfflinePlayer citizenPlayer = citizen.getPlayer();
+
+            if (color) {
+                if (citizenPlayer.isOnline()) {
+                    infoMessage.append(ChatColor.GREEN);
+                } else {
+                    infoMessage.append(ChatColor.RED);
+                }
+            }
+
+            infoMessage.append(citizenPlayer.getName());
+
+            if (color) {
+                infoMessage.append(ChatColor.GRAY);
+            }
+
+            if (i < citizens.size() - 1) {
+                infoMessage.append(",");
+            }
+        }
+
+        return infoMessage.toString();
+    }
+
 }

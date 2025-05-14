@@ -1,6 +1,7 @@
 package me.rileycalhoun.landclaim.towns;
 
 import me.rileycalhoun.landclaim.LandClaim;
+import me.rileycalhoun.landclaim.citizens.Citizen;
 import org.bukkit.OfflinePlayer;
 import org.jetbrains.annotations.Nullable;
 
@@ -45,21 +46,34 @@ public class TownsCache {
         return getTowns().get(uniqueId);
     }
 
-    public @Nullable Town getTownByPlayer(OfflinePlayer player) {
-        return getTowns()
-                .values()
-                .stream()
-                .filter(t -> plugin
-                                .getCitizensCache()
-                                .getCitizensInTown(t)
-                                .stream()
-                                .anyMatch(c -> c
-                                        .getPlayer()
-                                        .getUniqueId()
-                                        .equals(player.getUniqueId()))
-                )
-                .findFirst()
-                .orElse(null);
+    private UUID generateUniqueId() {
+        UUID uuid = UUID.randomUUID();
+        while (getTownByUUID(uuid) != null) {
+            uuid = UUID.randomUUID();
+        }
+
+        return uuid;
+    }
+
+    public Town createTown(String name) {
+        if (getTownByName(name) != null) return null;
+        Town town = new Town(generateUniqueId(), name);
+        // TODO: TownCreateEvent
+
+        towns.put(town.getUniqueId(), town);
+        return town;
+    }
+
+    public void disbandTown(Town town) {
+        List<Citizen> citizens = plugin.getCitizensCache()
+                        .getCitizensInTown(town);
+
+        citizens.forEach(c -> {
+            c.setCitizenRank(null);
+            c.setTownUniqueId(null);
+        });
+
+        towns.remove(town.getUniqueId());
     }
 
 }

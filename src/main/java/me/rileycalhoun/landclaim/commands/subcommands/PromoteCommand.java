@@ -1,5 +1,8 @@
 package me.rileycalhoun.landclaim.commands.subcommands;
 
+import me.rileycalhoun.landclaim.LandClaim;
+import me.rileycalhoun.landclaim.citizens.Citizen;
+import me.rileycalhoun.landclaim.citizens.CitizenRank;
 import me.rileycalhoun.landclaim.commands.SubCommand;
 import me.rileycalhoun.landclaim.config.LangFile;
 import me.rileycalhoun.landclaim.towns.Town;
@@ -12,7 +15,7 @@ import java.util.Optional;
 
 public class PromoteCommand extends SubCommand {
 
-    public PromoteCommand(JavaPlugin plugin, TownsCache townsCache, LangFile language) {
+    public PromoteCommand(LandClaim plugin) {
         super(plugin);
     }
 
@@ -47,30 +50,46 @@ public class PromoteCommand extends SubCommand {
     }
 
     @Override
-    public void execute(Player player, String[] args) {
-        assert townsCache.getTownByPlayer(player).isPresent();
+    public void execute(Citizen citizen, Player player, String[] args) {
+        assert citizen.getTownUniqueId() != null;
+        assert citizen.getCitizenRank() != null;
 
-        Town town = townsCache.getTownByPlayer(player).get();
-        Player otherPlayer = Bukkit.getPlayer(args[0]);
-        if (otherPlayer == null) {
-            player.sendMessage(language.PLAYER_NOT_ONLINE);
+        if (citizen.getCitizenRank().getValue() < CitizenRank.MAYOR.getValue()) {
+            player.sendMessage(format(player, language.TOWN_MAYOR_REQUIRED));
+        }
+
+        Player targetPlayer = Bukkit.getPlayer(args[0]);
+        if (targetPlayer == null) {
+            player.sendMessage(format(player, language.PLAYER_NOT_ONLINE));
             return;
         }
 
-        if (!town.isCitizen(otherPlayer)) {
-            player.sendMessage(language.PLAYER_NOT_IN_TOWN);
+        if (targetPlayer.getName().equalsIgnoreCase(player.getName())) {
+            player.sendMessage(format(player, "&cYou cannot promote yourself past mayor!"));
             return;
         }
 
-        assert town.getCitizen(otherPlayer).isPresent();
-        TownCitizen citizen = town.getCitizen(otherPlayer).get();
+        Citizen targetCitizen = citizensCache.getCitizenByUUID(targetPlayer.getUniqueId());
+        assert targetCitizen != null;
 
-        if (citizen.getRank() == TownRank.CITIZEN) {
+        if (targetCitizen.getTownUniqueId() != citizen.getTownUniqueId()) {
+            player.sendMessage(format(player, language.PLAYER_NOT_IN_TOWN));
+            return;
+        }
 
-        } else if (citizen.getRank() == TownRank.OFFICER) {
 
+        if (args.length >= 2 && args[1].equalsIgnoreCase("confirm")) {
+            targetCitizen.promote();
+            targetPlayer.sendMessage(format(player, "&aYou have been promoted to &7" + targetCitizen.getCitizenRank()));
+            player.sendMessage(format(player, "&aYou have promoted &7" + targetPlayer.getName() + "&a to &7" + targetCitizen.getCitizenRank()));
         } else {
-
+            if (targetCitizen.getCitizenRank() == CitizenRank.CITIZEN) {
+                player.sendMessage(format(player, "&aAre you sure you want to promote &7" + player.getName()
+                        + " &ato &7OFFICER&a? Type /town promote " + targetPlayer.getName() + " to confirm."));
+            } else if (targetCitizen.getCitizenRank() == CitizenRank.OFFICER) {
+                player.sendMessage(format(player, "&aAre you sure you want to promote &7" + player.getName()
+                        + " &ato &7MAYOR&a? Type /town promote " + targetPlayer.getName() + " to confirm."));
+            }
         }
     }
 

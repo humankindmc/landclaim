@@ -1,5 +1,6 @@
 package me.rileycalhoun.landclaim.claims;
 
+import me.rileycalhoun.landclaim.towns.Town;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -10,7 +11,7 @@ import java.util.UUID;
 public class ClaimsCache {
 
     @NotNull
-    private LinkedHashMap<UUID, ClaimArea> claims;
+    private final LinkedHashMap<UUID, ClaimArea> claims;
 
     public ClaimsCache(int max_size) {
         this.claims = new LinkedHashMap<>(max_size+1, 0.75f, true) {
@@ -23,6 +24,7 @@ public class ClaimsCache {
         };
     }
 
+    @NotNull
     public LinkedHashMap<UUID, ClaimArea> getClaims() {
         return claims;
     }
@@ -30,6 +32,11 @@ public class ClaimsCache {
     @Nullable
     public ClaimArea getClaimByUUID(UUID uuid) {
         return claims.get(uuid);
+    }
+
+    @Nullable
+    public ClaimArea getClaimByTown(Town town) {
+        return claims.get(town.getUniqueId());
     }
 
 }

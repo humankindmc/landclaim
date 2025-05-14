@@ -34,7 +34,7 @@ public class Vector3d {
 
     public static Vector3d max(Vector3d a, Vector3d b) {
         int max_x = Math.max(a.getX(), b.getX());
-        int max_y = Math.max(a.getY(), b.getY())
+        int max_y = Math.max(a.getY(), b.getY());
         int max_z = Math.max(a.getZ(), b.getZ());
         return new Vector3d(max_x, max_y,  max_z);
     }

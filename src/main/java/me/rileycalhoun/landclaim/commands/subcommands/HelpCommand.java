@@ -1,5 +1,7 @@
 package me.rileycalhoun.landclaim.commands.subcommands;
 
+import me.rileycalhoun.landclaim.LandClaim;
+import me.rileycalhoun.landclaim.citizens.Citizen;
 import me.rileycalhoun.landclaim.commands.SubCommand;
 import me.rileycalhoun.landclaim.config.LangFile;
 import me.rileycalhoun.landclaim.towns.TownsCache;
@@ -15,7 +17,7 @@ public class HelpCommand extends SubCommand {
     @NotNull
     private final String helpMessage;
 
-    public HelpCommand(JavaPlugin plugin, TownsCache townsCache, LangFile language, @NotNull String helpMessage) {
+    public HelpCommand(LandClaim plugin, @NotNull String helpMessage) {
         super(plugin);
         this.helpMessage = helpMessage;
     }
@@ -51,7 +53,8 @@ public class HelpCommand extends SubCommand {
     }
 
     @Override
-    public void execute(Player player, String[] args) {
+    public void execute(Citizen citizen, Player player, String[] args) {
         player.sendMessage(helpMessage);
     }
+
 }
