@@ -4,7 +4,9 @@ import me.clip.placeholderapi.PlaceholderAPI;
 import me.rileycalhoun.landclaim.LandClaim;
 import me.rileycalhoun.landclaim.citizens.Citizen;
 import me.rileycalhoun.landclaim.citizens.CitizensCache;
+import me.rileycalhoun.landclaim.claims.ClaimsCache;
 import me.rileycalhoun.landclaim.config.LangFile;
+import me.rileycalhoun.landclaim.invites.InviteCache;
 import me.rileycalhoun.landclaim.towns.TownsCache;
 import org.bukkit.ChatColor;
 import org.bukkit.OfflinePlayer;
@@ -19,12 +21,17 @@ public abstract class SubCommand {
     protected final LangFile language;
     protected final CitizensCache citizensCache;
     protected final TownsCache townsCache;
+    protected final ClaimsCache claimsCache;
+    protected final InviteCache inviteCache;
 
     public SubCommand(LandClaim plugin) {
         this.plugin = plugin;
+
         this.language = plugin.getLangFile();
         this.citizensCache = plugin.getCitizensCache();
         this.townsCache = plugin.getTownsCache();
+        this.claimsCache = plugin.getClaimsCache();
+        this.inviteCache = plugin.getInviteCache();
     }
 
     public abstract String getName();
