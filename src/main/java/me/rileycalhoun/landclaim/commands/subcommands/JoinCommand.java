@@ -63,6 +63,8 @@ public class JoinCommand extends SubCommand {
         }
 
         citizen.joinTown(town);
+        inviteCache.removeInvite(town, player);
+
         player.sendMessage(format(player, language.TOWN_JOINED));
         citizensCache.getCitizensInTown(town).forEach(c ->
                 c.sendMessageIfOnline(format(player, language.PLAYER_JOINED)));

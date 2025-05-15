@@ -52,6 +52,7 @@ public class PromoteCommand extends SubCommand {
 
         if (citizen.getCitizenRank().getValue() < CitizenRank.MAYOR.getValue()) {
             player.sendMessage(format(player, language.TOWN_MAYOR_REQUIRED));
+            return;
         }
 
         Player targetPlayer = Bukkit.getPlayer(args[0]);
@@ -76,8 +77,8 @@ public class PromoteCommand extends SubCommand {
 
         if (args.length >= 2 && args[1].equalsIgnoreCase("confirm")) {
             targetCitizen.promote();
-            targetPlayer.sendMessage(format(player, language.PLAYER_DEMOTED));
-            player.sendMessage(format(player, language.DEMOTE_SUCCESS));
+            targetPlayer.sendMessage(format(targetPlayer, language.PLAYER_PROMOTED));
+            player.sendMessage(format(targetPlayer, language.PROMOTE_SUCCESS));
         } else {
             if (targetCitizen.getCitizenRank() == CitizenRank.CITIZEN) {
                 player.sendMessage(format(targetPlayer, language.TOWN_PROMOTE_CONFIRMATION_OFFICER));

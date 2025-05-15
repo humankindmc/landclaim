@@ -1,5 +1,5 @@
 # DO NOT CHANGE
-version: 2
+version: 3
 
 # This is the language file for the plugin.
 # Customize the look of the plugin.
@@ -69,7 +69,7 @@ cannot-promote-self: "&cYou cannot promote yourself, you're already the mayor!"
 promote-confirmation-officer: "&aAre you sure you want to promote %player_name% to %7OFFICER&a? Type &7/town promote %player_name &aconfirm to confirm."
 promote-confirmation-mayor: "&aAre you sure you want to promote %player_name% to %7MAYOR&a? Type &7/town promote %player_name &aconfirm to confirm."
 promote-success: "&aYou have successfully promoted &7%player_name%&a to &7%landclaim_citizen_rank%&a!"
-player-promoted: "&You have been demoted to &7%landclaim_citizen_rank%&a!"
+player-promoted: "&aYou have been promoted to &7%landclaim_citizen_rank%&a!"
 
 # Town Demote
 demote-confirmation: "&aAre you sure you want to demote %player_name% to %7CITIZEN&a? Type &7/town demote %player_name &aconfirm to confirm."

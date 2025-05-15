@@ -63,7 +63,7 @@ public class ClaimCommand extends SubCommand {
         }
 
         ClaimedArea claimedArea = claimsCache.getClaimByUUID(citizen.getTownUniqueId());
-        if (!claimedArea.isChunkTouchingClaim(chunk)) {
+        if (!claimedArea.claimedChunks().isEmpty() && !claimedArea.isChunkTouchingClaim(chunk)) {
             player.sendMessage(format(player, language.CHUNK_NOT_BORDERING));
             return;
         }

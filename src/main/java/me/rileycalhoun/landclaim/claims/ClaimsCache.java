@@ -34,12 +34,11 @@ public class ClaimsCache {
     }
 
     public ClaimedArea getClaimByUUID(UUID townUniqueId) {
-        ClaimedArea claimedArea = primaryClaimsCache.get(townUniqueId);
-        if(claimedArea == null) {
-            return primaryClaimsCache.put(townUniqueId, new ClaimedArea(townUniqueId, new ArrayList<>()));
+        if(primaryClaimsCache.get(townUniqueId) == null) {
+            primaryClaimsCache.put(townUniqueId, new ClaimedArea(townUniqueId, new ArrayList<>()));
         }
 
-        return claimedArea;
+        return primaryClaimsCache.get(townUniqueId);
     }
 
     public boolean isChunkClaimed(Chunk chunk) {

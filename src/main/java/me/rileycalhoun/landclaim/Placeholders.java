@@ -68,6 +68,10 @@ public class Placeholders extends PlaceholderExpansion {
             return null;
         }
 
+        if (params.equalsIgnoreCase("citizen_rank")) {
+            return citizen.getCitizenRank() == null ? null : citizen.getCitizenRank().toString();
+        }
+
         if (params.equalsIgnoreCase("town_citizens_colored")) {
             Town town = landClaim.getTownsCache().getTownByUUID(citizen.getTownUniqueId());
             if (town == null) return null;

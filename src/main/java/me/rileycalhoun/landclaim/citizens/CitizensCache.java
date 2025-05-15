@@ -46,9 +46,10 @@ public class CitizensCache {
         return citizens
                 .values()
                 .stream()
-                .filter(c -> Objects.requireNonNull(c
-                        .getTownUniqueId())
-                        .equals(town.getUniqueId()))
+                .filter(c -> {
+                    UUID townUniqueId = c.getTownUniqueId();
+                    return townUniqueId != null && townUniqueId.equals(town.getUniqueId());
+                })
                 .collect(Collectors.toList());
     }
 

@@ -163,7 +163,7 @@ public class LangFile {
         CANNOT_DEMOTE_SELF = this.langFile.getString("cannot-demote-self");
         CANNOT_DEMOTE_PAST_CITIZEN = this.langFile.getString("cannot-demote-past-citizen");
         DEMOTE_SUCCESS = this.langFile.getString("demote-success");
-        PLAYER_DEMOTED = this.langFile.getString("player-demote");
+        PLAYER_DEMOTED = this.langFile.getString("player-demoted");
 
         /* Town Kick */
         KICK_SUCCESS = this.langFile.getString("kick-success");

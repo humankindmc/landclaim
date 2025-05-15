@@ -78,10 +78,7 @@ public class InviteCommand extends SubCommand {
         inviteCache.invite(town, invited);
 
         invited.sendMessage(format(player, language.TOWN_INVITE));
-        citizensCache.getCitizensInTown(town).forEach(c ->
-                c.sendMessageIfOnline(
-                        format(player, language.TOWN_INVITE)
-                ));
+        player.sendMessage(format(invited, language.PLAYER_INVITE));
     }
 
 }

@@ -13,14 +13,14 @@ public class Town {
     @NotNull
     private String name;
 
-    @Nullable
+    @NotNull
     private String motd;
 
     public Town(@NotNull UUID uniqueId, @NotNull String name) {
-        this(uniqueId, name, null);
+        this(uniqueId, name, "Default town description.");
     }
 
-    public Town(@NotNull UUID uniqueId, @NotNull String name, @Nullable String motd) {
+    public Town(@NotNull UUID uniqueId, @NotNull String name, @NotNull String motd) {
         this.uniqueId = uniqueId;
         this.name = name;
         this.motd = motd;

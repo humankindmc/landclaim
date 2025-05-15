@@ -40,4 +40,10 @@ public class InviteCache {
         return players.contains(player);
     }
 
+    public void removeInvite(Town town, OfflinePlayer player) {
+        ArrayList<OfflinePlayer> players = invites.getOrDefault(town, new ArrayList<>());
+        players.remove(player);
+        invites.put(town, players);
+    }
+
 }

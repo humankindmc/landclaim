@@ -47,6 +47,11 @@ public class CreateCommand extends SubCommand {
 
     @Override
     public void execute(Citizen citizen, Player player, String[] args) {
+        if (citizen.getTownUniqueId() != null) {
+            player.sendMessage(format(player, language.PLAYER_ALREADY_IN_TOWN));
+            return;
+        }
+
         String townName = args[0];
         if (townName.equalsIgnoreCase("confirm")) {
             player.sendMessage(format(player, language.TOWN_ILLEGAL_NAME));
