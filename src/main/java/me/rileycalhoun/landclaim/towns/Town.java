@@ -1,6 +1,5 @@
 package me.rileycalhoun.landclaim.towns;
 
-import me.rileycalhoun.landclaim.claims.ClaimedArea;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 

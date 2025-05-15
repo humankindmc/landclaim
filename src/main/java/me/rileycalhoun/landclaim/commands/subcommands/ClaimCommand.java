@@ -4,7 +4,6 @@ import me.rileycalhoun.landclaim.LandClaim;
 import me.rileycalhoun.landclaim.citizens.Citizen;
 import me.rileycalhoun.landclaim.citizens.CitizenRank;
 import me.rileycalhoun.landclaim.claims.ClaimedArea;
-import me.rileycalhoun.landclaim.claims.ClaimsCache;
 import me.rileycalhoun.landclaim.commands.SubCommand;
 import org.bukkit.Chunk;
 import org.bukkit.entity.Player;
