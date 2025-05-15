@@ -43,6 +43,7 @@ public class TownCommand implements CommandExecutor {
         subCommands.add(new DemoteCommand(plugin));
         subCommands.add(new JoinCommand(plugin));
         subCommands.add(new LeaveCommand(plugin));
+        subCommands.add(new KickCommand(plugin));
 
         StringBuilder stringBuilder = new StringBuilder();
         for (int i = 0; i < subCommands.size(); i++) {
