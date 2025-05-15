@@ -5,17 +5,14 @@ import me.rileycalhoun.landclaim.citizens.Citizen;
 import me.rileycalhoun.landclaim.citizens.CitizenRank;
 import me.rileycalhoun.landclaim.commands.SubCommand;
 import me.rileycalhoun.landclaim.towns.Town;
-import me.rileycalhoun.landclaim.invites.InviteCache;
 import org.bukkit.entity.Player;
 
 import java.util.Optional;
 
 public class InviteCommand extends SubCommand {
 
-    private final InviteCache inviteCache;
     public InviteCommand(LandClaim plugin) {
         super(plugin);
-        this.inviteCache = plugin.getInviteCache();
     }
 
     @Override

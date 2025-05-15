@@ -1,6 +1,7 @@
 package me.rileycalhoun.landclaim;
 
 import me.rileycalhoun.landclaim.citizens.CitizensCache;
+import me.rileycalhoun.landclaim.claims.ClaimsCache;
 import me.rileycalhoun.landclaim.commands.TownCommand;
 import me.rileycalhoun.landclaim.config.LangFile;
 import me.rileycalhoun.landclaim.invites.InviteCache;
@@ -19,6 +20,7 @@ public class LandClaim extends JavaPlugin {
 
     private CitizensCache citizensCache;
     private TownsCache townsCache;
+    private ClaimsCache claimsCache;
     private InviteCache inviteCache;
 
     private LangFile langFile;
@@ -56,18 +58,10 @@ public class LandClaim extends JavaPlugin {
             return;
         }
 
-//        getLogger().info("Getting towns file...");
-//        try {
-//            this.townsFile = new TownsFile(getDataFolder());
-//        } catch (IOException | NullPointerException e) {
-//            getLogger().severe("Could not get towns file: " + e.getMessage());
-//            disablePlugin();
-//            return;
-//        }
-
         getLogger().info("Initializing caches...");
         this.citizensCache = new CitizensCache(100);
         this.townsCache = new TownsCache(this, 100);
+        this.claimsCache = new ClaimsCache(100);
         this.inviteCache = new InviteCache(100);
 
         getLogger().info("Initializing commands...");
@@ -76,37 +70,13 @@ public class LandClaim extends JavaPlugin {
         getLogger().info("Initializing listeners...");
         registerEvents();
 
-
         long endTime = System.nanoTime();
         long duration = (endTime - startTime) / 1_000_000; // get the time in ms
         getLogger().info("Done! The plugin was started in " + duration + "ms.");
-
-//        getServer().getScheduler().runTaskTimerAsynchronously(this, () -> {
-//            long start = System.nanoTime();
-//            getLogger().info("Saving towns...");
-//
-//            try {
-//                townsCache.saveTowns();
-//            } catch (IOException e) {
-//                getLogger().severe("Could not save towns.yml: " + e.getMessage());
-//            }
-//
-//            long dur = (System.nanoTime() - start) / 1_000_000; // get the time in ms
-//            getLogger().info("Saved towns in " + dur + "ms.");
-//        }, 20L * 60L * 10L, 20L * 60L * 10L);
     }
 
     @Override
     public void onDisable() {
-//        if (this.townsCache != null) {
-//            getLogger().info("Saving towns...");
-//            try {
-//                townsCache.saveTowns();
-//            } catch (Exception e) {
-//                getLogger().severe("Could not save towns.yml: " + e.getMessage());
-//            }
-//        }
-
         getLogger().info("LandClaim has been disabled!");
     }
 
@@ -116,6 +86,10 @@ public class LandClaim extends JavaPlugin {
 
     public TownsCache getTownsCache() {
         return townsCache;
+    }
+
+    public ClaimsCache getClaimsCache() {
+        return claimsCache;
     }
 
     public InviteCache getInviteCache() {
