@@ -77,6 +77,10 @@ public class PromoteCommand extends SubCommand {
 
         if (args.length >= 2 && args[1].equalsIgnoreCase("confirm")) {
             targetCitizen.promote();
+            if (targetCitizen.getCitizenRank() == CitizenRank.MAYOR) {
+                citizen.demote();
+            }
+
             targetPlayer.sendMessage(format(targetPlayer, language.PLAYER_PROMOTED));
             player.sendMessage(format(targetPlayer, language.PROMOTE_SUCCESS));
         } else {

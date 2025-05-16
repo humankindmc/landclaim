@@ -5,7 +5,7 @@ import me.rileycalhoun.landclaim.LandClaim;
 import me.rileycalhoun.landclaim.citizens.Citizen;
 import me.rileycalhoun.landclaim.citizens.CitizensCache;
 import me.rileycalhoun.landclaim.commands.subcommands.*;
-import me.rileycalhoun.landclaim.config.LangFile;
+import me.rileycalhoun.landclaim.storage.LangFile;
 import me.rileycalhoun.landclaim.towns.TownsCache;
 import org.bukkit.ChatColor;
 import org.bukkit.command.Command;

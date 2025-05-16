@@ -3,9 +3,10 @@ package me.rileycalhoun.landclaim;
 import me.rileycalhoun.landclaim.citizens.CitizensCache;
 import me.rileycalhoun.landclaim.claims.ClaimsCache;
 import me.rileycalhoun.landclaim.commands.TownCommand;
-import me.rileycalhoun.landclaim.config.LangFile;
+import me.rileycalhoun.landclaim.storage.LangFile;
 import me.rileycalhoun.landclaim.invites.InviteCache;
 import me.rileycalhoun.landclaim.listener.ConnectionListener;
+import me.rileycalhoun.landclaim.storage.TownsFile;
 import me.rileycalhoun.landclaim.towns.TownsCache;
 import org.bukkit.Bukkit;
 import org.bukkit.command.CommandExecutor;
@@ -24,6 +25,7 @@ public class LandClaim extends JavaPlugin {
     private InviteCache inviteCache;
 
     private LangFile langFile;
+    private TownsFile townsFile;
 
     @Override
     public void onEnable() {
@@ -58,6 +60,15 @@ public class LandClaim extends JavaPlugin {
             return;
         }
 
+        getLogger().info("Getting towns file...");
+        try {
+            this.townsFile = new TownsFile(getDataFolder());
+        } catch (IOException e) {
+            getLogger().severe("Could not get towns file: " + e.getMessage());
+            disablePlugin();
+            return;
+        }
+
         getLogger().info("Initializing caches...");
         this.citizensCache = new CitizensCache(100);
         this.townsCache = new TownsCache(this, 100);
@@ -73,10 +84,19 @@ public class LandClaim extends JavaPlugin {
         long endTime = System.nanoTime();
         long duration = (endTime - startTime) / 1_000_000; // get the time in ms
         getLogger().info("Done! The plugin was started in " + duration + "ms.");
+
+        getServer().getScheduler().runTaskTimerAsynchronously(this, () -> {
+            getLogger().info("Saving all files...");
+            saveAllFiles();
+            getLogger().info("Done!");
+        }, 20L * 60L * 10L, 20L * 60L * 10L);
     }
 
     @Override
     public void onDisable() {
+        getLogger().info("Saving all files...");
+        saveAllFiles();
+
         getLogger().info("LandClaim has been disabled!");
     }
 
@@ -98,6 +118,14 @@ public class LandClaim extends JavaPlugin {
 
     public LangFile getLangFile() {
         return langFile;
+    }
+
+    public TownsFile getTownsFile() {
+        return townsFile;
+    }
+
+    private void saveAllFiles() {
+        getTownsCache().saveTowns();
     }
 
     private boolean noDependency(String pluginName) {

@@ -4,6 +4,7 @@ import me.rileycalhoun.landclaim.LandClaim;
 import me.rileycalhoun.landclaim.citizens.Citizen;
 import org.jetbrains.annotations.Nullable;
 
+import java.io.IOException;
 import java.util.*;
 
 public class TownsCache {
@@ -31,18 +32,21 @@ public class TownsCache {
     }
 
     public @Nullable Town getTownByName(String name) {
-        return getTowns()
-                .values()
-                .stream()
-                .filter(t -> t
-                        .getName()
-                        .equalsIgnoreCase(name))
-                .findFirst()
-                .orElse(null);
+        for (Town town : towns.values()) {
+            if (town.getName().equalsIgnoreCase(name)) {
+                return town;
+            }
+        }
+
+        return plugin.getTownsFile().getTownByName(name);
     }
 
     public @Nullable Town getTownByUUID(UUID uniqueId) {
-        return getTowns().get(uniqueId);
+        if (towns.containsKey(uniqueId)) {
+            return towns.get(uniqueId);
+        }
+
+        return plugin.getTownsFile().getTownByUniqueId(uniqueId);
     }
 
     private UUID generateUniqueId() {
@@ -73,6 +77,15 @@ public class TownsCache {
         });
 
         towns.remove(town.getUniqueId());
+    }
+
+    public void saveTowns() {
+        try {
+            Collection<Town> townSet = towns.values();
+            plugin.getTownsFile().saveAllTowns(townSet);
+        } catch (IOException e) {
+            plugin.getLogger().severe("Could not save towns!");
+        }
     }
 
 }
