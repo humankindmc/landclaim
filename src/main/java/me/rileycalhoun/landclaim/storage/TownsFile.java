@@ -68,13 +68,13 @@ public class TownsFile extends YamlFile {
         }
 
         for (String key : townsSection.getRoutesAsStrings(false)) {
-            String name = townsSection.getString("towns." + key + ".name");
+            String name = townsSection.getString(key + ".name");
             if (name == null || !name.equalsIgnoreCase(expected)) {
                 continue;
             }
 
             UUID uuid = UUID.fromString(key);
-            String motd = townsSection.getString("towns." + key + ".motd");
+            String motd = townsSection.getString(key + ".motd");
             return new Town(uuid, name, motd);
         }
 

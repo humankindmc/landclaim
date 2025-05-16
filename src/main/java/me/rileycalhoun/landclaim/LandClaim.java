@@ -3,6 +3,7 @@ package me.rileycalhoun.landclaim;
 import me.rileycalhoun.landclaim.citizens.CitizensCache;
 import me.rileycalhoun.landclaim.claims.ClaimsCache;
 import me.rileycalhoun.landclaim.commands.TownCommand;
+import me.rileycalhoun.landclaim.storage.CitizensFile;
 import me.rileycalhoun.landclaim.storage.LangFile;
 import me.rileycalhoun.landclaim.invites.InviteCache;
 import me.rileycalhoun.landclaim.listener.ConnectionListener;
@@ -26,6 +27,7 @@ public class LandClaim extends JavaPlugin {
 
     private LangFile langFile;
     private TownsFile townsFile;
+    private CitizensFile citizensFile;
 
     @Override
     public void onEnable() {
@@ -69,11 +71,20 @@ public class LandClaim extends JavaPlugin {
             return;
         }
 
+        getLogger().info("Getting citizens file...");
+        try {
+            this.citizensFile = new CitizensFile(getDataFolder());
+        } catch (IOException e) {
+            getLogger().severe("Could not get citizens file: " + e.getMessage());
+            disablePlugin();
+            return;
+        }
+
         getLogger().info("Initializing caches...");
-        this.citizensCache = new CitizensCache(100);
-        this.townsCache = new TownsCache(this, 100);
-        this.claimsCache = new ClaimsCache(100);
-        this.inviteCache = new InviteCache(100);
+        this.citizensCache = new CitizensCache(this, 1);
+        this.townsCache = new TownsCache(this, 1);
+        this.claimsCache = new ClaimsCache(1);
+        this.inviteCache = new InviteCache(1);
 
         getLogger().info("Initializing commands...");
         registerCommands();
@@ -124,8 +135,13 @@ public class LandClaim extends JavaPlugin {
         return townsFile;
     }
 
+    public CitizensFile getCitizensFile() {
+        return citizensFile;
+    }
+
     private void saveAllFiles() {
         getTownsCache().saveTowns();
+        getCitizensCache().saveCitizens();
     }
 
     private boolean noDependency(String pluginName) {

@@ -24,6 +24,20 @@ public class TownsCache {
                 return size() > max_size;
             }
 
+            @Override
+            public boolean remove(Object key, Object value) {
+                Town town = (Town) value;
+
+                try {
+                    plugin.getLogger().info("Saving town with UUID " + town.getUniqueId());
+                    plugin.getTownsFile().saveTown(town);
+                } catch (IOException e) {
+                    plugin.getLogger().info("Could not save citizen with UUID " + town.getUniqueId() + ": " + e.getMessage());
+                }
+
+                return super.remove(key, value);
+            }
+
         };
     }
 
@@ -46,7 +60,12 @@ public class TownsCache {
             return towns.get(uniqueId);
         }
 
-        return plugin.getTownsFile().getTownByUniqueId(uniqueId);
+        Town town = plugin.getTownsFile().getTownByUniqueId(uniqueId);
+        if (town != null) {
+            towns.put(uniqueId, town);
+        }
+
+        return town;
     }
 
     private UUID generateUniqueId() {
