@@ -4,6 +4,7 @@ import me.rileycalhoun.landclaim.citizens.CitizensCache;
 import me.rileycalhoun.landclaim.claims.ClaimsCache;
 import me.rileycalhoun.landclaim.commands.TownCommand;
 import me.rileycalhoun.landclaim.storage.CitizensFile;
+import me.rileycalhoun.landclaim.storage.ClaimsFile;
 import me.rileycalhoun.landclaim.storage.LangFile;
 import me.rileycalhoun.landclaim.invites.InviteCache;
 import me.rileycalhoun.landclaim.listener.ConnectionListener;
@@ -28,6 +29,7 @@ public class LandClaim extends JavaPlugin {
     private LangFile langFile;
     private TownsFile townsFile;
     private CitizensFile citizensFile;
+    private ClaimsFile claimsFile;
 
     @Override
     public void onEnable() {
@@ -80,10 +82,19 @@ public class LandClaim extends JavaPlugin {
             return;
         }
 
+        getLogger().info("Getting claims file...");
+        try {
+            this.claimsFile = new ClaimsFile(getDataFolder());
+        } catch (IOException e) {
+            getLogger().severe("Could not get claims file: " + e.getMessage());
+            disablePlugin();
+            return;
+        }
+
         getLogger().info("Initializing caches...");
         this.citizensCache = new CitizensCache(this, 1);
         this.townsCache = new TownsCache(this, 1);
-        this.claimsCache = new ClaimsCache(1);
+        this.claimsCache = new ClaimsCache(this, 1);
         this.inviteCache = new InviteCache(1);
 
         getLogger().info("Initializing commands...");
@@ -139,9 +150,22 @@ public class LandClaim extends JavaPlugin {
         return citizensFile;
     }
 
+    public ClaimsFile getClaimsFile() {
+        return claimsFile;
+    }
+
     private void saveAllFiles() {
-        getTownsCache().saveTowns();
-        getCitizensCache().saveCitizens();
+        if (getTownsCache() != null) {
+            getTownsCache().saveTowns();
+        }
+
+        if (getCitizensCache() != null) {
+            getCitizensCache().saveCitizens();
+        }
+
+        if (getClaimsCache() != null) {
+            getClaimsCache().saveClaims();
+        }
     }
 
     private boolean noDependency(String pluginName) {

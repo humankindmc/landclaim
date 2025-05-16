@@ -73,7 +73,7 @@ public class CitizensCache {
             Collection<Citizen> citizenSet = citizens.values();
             citizensFile.saveAllCitizens(citizenSet);
         } catch (IOException e) {
-            plugin.getLogger().severe("Could not save towns!");
+            plugin.getLogger().severe("Could not save citizens!");
         }
     }
 
