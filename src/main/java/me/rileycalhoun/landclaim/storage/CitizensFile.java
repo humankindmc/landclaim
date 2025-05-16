@@ -58,10 +58,10 @@ public class CitizensFile extends YamlFile {
             return null;
         }
 
-        String rank = citizenSection.getString("name");
+        String rank = citizenSection.getString("rank");
         CitizenRank citizenRank = CitizenRank.valueOf(rank);
 
-        String town = citizenSection.getString("motd");
+        String town = citizenSection.getString("town");
         UUID townUniqueId = UUID.fromString(town);
 
         OfflinePlayer player = Bukkit.getOfflinePlayer(uuid);
